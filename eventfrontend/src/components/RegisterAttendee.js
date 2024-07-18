@@ -14,10 +14,13 @@ export default function RegisterAttendee({ eventId, onAttendeeRegistered }) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(attendee),
-    }).then(() => {
-      onAttendeeRegistered();
-      setName("");
-    });
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Attendee registered:", data);
+        onAttendeeRegistered();
+        setName("");
+      });
   };
 
   return (

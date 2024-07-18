@@ -1,7 +1,9 @@
 package com.Rithil.Event_Management.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
+//Attendee clas
 @Entity
 public class Attendee {
     @Id
@@ -10,7 +12,8 @@ public class Attendee {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "event_id")
+    @JsonBackReference
     private Event event;
 
     public Attendee() {}

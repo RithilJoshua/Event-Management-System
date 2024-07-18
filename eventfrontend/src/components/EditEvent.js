@@ -17,14 +17,24 @@ export default function EditEvent({ event, onClose, onEventUpdated }) {
   const handleClick = (e) => {
     e.preventDefault();
     const updatedEvent = { ...event, name, description, date, location };
-    fetch(`http://localhost:8080/event/${event.id}`, {
+    fetch(`http://localhost:8080/event/update/${event.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedEvent),
-    }).then(() => {
-      onEventUpdated();
-      onClose();
-    });
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok " + response.statusText);
+        }
+        return response.json();
+      })
+      .then(() => {
+        onEventUpdated();
+        onClose();
+      })
+      .catch((error) => {
+        console.error("There was an error with the fetch operation:", error);
+      });
   };
 
   return (

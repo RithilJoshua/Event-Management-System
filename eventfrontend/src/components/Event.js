@@ -8,10 +8,13 @@ import {
   IconButton,
   Grid,
   Typography,
+  Collapse,
 } from "@mui/material";
 import EditEvent from "./EditEvent";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
 export default function Event() {
   const paperStyle = {
@@ -26,8 +29,13 @@ export default function Event() {
   const [attendees, setAttendees] = useState([{ name: "" }]);
   const [events, setEvents] = useState([]);
   const [editEvent, setEditEvent] = useState(null);
+  const [visibleEventId, setVisibleEventId] = useState(null);
   const editRef = useRef(null);
   const dataPanelRef = useRef(null);
+
+  const toggleAttendees = (eventId) => {
+    setVisibleEventId(visibleEventId === eventId ? null : eventId);
+  };
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -189,38 +197,75 @@ export default function Event() {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
+              flexDirection: "column",
             }}
             key={event.id}
           >
-            <Box>
-              <Typography variant="body1">
-                <strong>Id:</strong> {event.id}
-              </Typography>
-              <Typography variant="body1">
-                <strong>Name:</strong> {event.name}
-              </Typography>
-              <Typography variant="body1">
-                <strong>Description:</strong> {event.description}
-              </Typography>
-              <Typography variant="body1">
-                <strong>Date:</strong> {event.date}
-              </Typography>
-              <Typography variant="body1">
-                <strong>Location:</strong> {event.location}
-              </Typography>
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <Box>
+                <Typography variant="body1">
+                  <strong>Id:</strong> {event.id}
+                </Typography>
+                <Typography variant="body1">
+                  <strong>Name:</strong> {event.name}
+                </Typography>
+                <Typography variant="body1">
+                  <strong>Description:</strong> {event.description}
+                </Typography>
+                <Typography variant="body1">
+                  <strong>Date:</strong> {event.date}
+                </Typography>
+                <Typography variant="body1">
+                  <strong>Location:</strong> {event.location}
+                </Typography>
+              </Box>
+              <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <Button variant="contained" onClick={() => handleEdit(event)}>
+                  Edit
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={() => handleDelete(event.id)}
+                >
+                  Delete
+                </Button>
+              </Box>
             </Box>
-            <Box sx={{ display: "flex", gap: 1 }}>
-              <Button variant="contained" onClick={() => handleEdit(event)}>
-                Edit
-              </Button>
-              <Button
-                variant="contained"
-                color="error"
-                onClick={() => handleDelete(event.id)}
-              >
-                Delete
-              </Button>
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                mt: 2,
+              }}
+            >
+              <IconButton onClick={() => toggleAttendees(event.id)}>
+                {visibleEventId === event.id ? (
+                  <ExpandLessIcon />
+                ) : (
+                  <ExpandMoreIcon />
+                )}
+              </IconButton>
             </Box>
+            <Collapse in={visibleEventId === event.id}>
+              <Box sx={{ mt: 2 }}>
+                <Typography variant="h7" fontWeight={"bold"} color={"blue"}>
+                  Attendees for the event
+                </Typography>
+                {event.attendees.map((attendee) => (
+                  <Typography key={attendee.id} variant="body1">
+                    {attendee.name}
+                  </Typography>
+                ))}
+              </Box>
+            </Collapse>
           </Paper>
         ))}
       </Paper>

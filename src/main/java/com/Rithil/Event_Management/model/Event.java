@@ -1,10 +1,11 @@
 package com.Rithil.Event_Management.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
 
-
+//event class with getters ans setters
 @Entity
 public class Event {
     @Id
@@ -59,6 +60,7 @@ public class Event {
     public void setLocation(String location) {
         this.location = location;
     }
+    @JsonManagedReference
     public List<Attendee> getAttendees() {
         return attendees;
     }

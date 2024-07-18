@@ -7,7 +7,6 @@ import com.Rithil.Event_Management.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.List;
 
 @RestController
@@ -59,6 +58,11 @@ public class EventController {
     @PostMapping("/{eventId}/register")
     public Attendee registerAttendee(@PathVariable int eventId, @RequestBody Attendee attendee) {
         return eventService.registerAttendee(eventId, attendee);
+    }
+
+    @GetMapping("/{eventId}/attendees")
+    public List<Attendee> getAttendeeByEvent(@PathVariable int eventId){
+        return eventService.getAttendeeByEvent(eventId);
     }
 
 }

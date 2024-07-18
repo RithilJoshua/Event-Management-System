@@ -12,4 +12,7 @@ public interface EventService {
     Optional<Event> getEventById(int id);
     void deleteEventById(int id);
     Attendee registerAttendee(int eventId, Attendee attendee);
+    List<Attendee> getAttendeeByEvent(int eventId);
+
+
 }
